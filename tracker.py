@@ -17,10 +17,10 @@ def track():
     if url and key:
         try:
             req.post(
-                url + "/rest/v1/email_clicks",
+                f"{url}/rest/v1/email_clicks",
                 headers={
                     "apikey": key,
-                    "Authorization": "Bearer " + key,
+                    "Authorization": f"Bearer {key}",
                     "Content-Type": "application/json",
                 },
                 json={
@@ -41,4 +41,5 @@ def health():
     return jsonify({"status": "ok"})
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
