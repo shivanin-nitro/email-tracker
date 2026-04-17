@@ -11,16 +11,16 @@ def track():
     link_type    = request.args.get("type", "link")
     redirect_url = request.args.get("redirect", "https://zodiac.nitrocommerce.ai/")
 
-    sb_url = os.environ.get("SUPABASE_URL", "")
-    sb_key = os.environ.get("SUPABASE_KEY", "")
+    url = os.environ.get("SUPABASE_URL", "")
+    key = os.environ.get("SUPABASE_KEY", "")
 
-    if sb_url and sb_key:
+    if url and key:
         try:
             req.post(
-                sb_url + "/rest/v1/email_clicks",
+                url + "/rest/v1/email_clicks",
                 headers={
-                    "apikey": sb_key,
-                    "Authorization": "Bearer " + sb_key,
+                    "apikey": key,
+                    "Authorization": "Bearer " + key,
                     "Content-Type": "application/json",
                 },
                 json={
