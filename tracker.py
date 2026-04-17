@@ -4,6 +4,11 @@ import os
 
 app = Flask(__name__)
 
+# This is the "Heartbeat" to tell Railway the app is alive
+@app.route("/health")
+def health():
+    return jsonify({"status": "ok"})
+
 @app.route("/track")
 def track():
     brand        = request.args.get("brand", "unknown")
@@ -16,8 +21,9 @@ def track():
 
     if url and key:
         try:
+            # We use a f-string to ensure the URL is built correctly
             req.post(
-                f"{url}/rest/v1/email_clicks",
+                f"{url.rstrip('/')}/rest/v1/email_clicks",
                 headers={
                     "apikey": key,
                     "Authorization": f"Bearer {key}",
@@ -32,14 +38,11 @@ def track():
                 timeout=5
             )
         except Exception as e:
-            print("Click save error:", e)
+            print(f"Database Save Error: {e}")
 
     return redirect(redirect_url)
 
-@app.route("/health")
-def health():
-    return jsonify({"status": "ok"})
-
 if __name__ == "__main__":
+    # Railway tells the app which port to use via the PORT variable
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
